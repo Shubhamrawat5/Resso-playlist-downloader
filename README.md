@@ -12,3 +12,8 @@
 -> Playlist info will be extract and all the matching songs will start donwloading!
 
 -> Also there is 5% chance that song's some remix or different same name song will get downloaded...
+
+
+### Screenshots
+
+<img src = "https://i.ibb.co/3zF789b/resso.png" width="800"/>
