@@ -5,7 +5,9 @@ const htmlEntities = require("html-entities");
 module.exports.getPlaylist = async () => {
   try {
     let playlistObj = {};
-    let url = "https://m.resso.app/ZSJgtp4CM/"; //put your playlist url
+    let url =
+      "https://www.resso.com/playlist/Love-and-Sad-Song-Best-Playlist-6949362741383780354"; //put your playlist url
+
     const response = await axios.get(url);
     let htmlContent = response.data;
     let soup = new JSSoup(htmlContent);
