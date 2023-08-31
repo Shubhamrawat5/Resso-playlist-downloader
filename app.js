@@ -12,6 +12,7 @@ let notFound = [];
 const download = async (song, url) => {
   let numb = index + 1;
   console.log(`(${numb}/${total}) Starting download: ${song}`);
+  console.log(url);
   const { data, headers } = await axios({
     method: "GET",
     url: url,
@@ -40,7 +41,7 @@ const download = async (song, url) => {
 
 const getURL = async (song, singer) => {
   let query = (song + "%20" + singer).replace(/\s/g, "%20");
-  // console.log(INFO_URL + query);
+  console.log(INFO_URL + query);
   const { data } = await axios.get(INFO_URL + query);
 
   // when no result then [{}] is returned so length is always 1, when 1 result then [{id:"",etc:""}]
@@ -74,11 +75,6 @@ const getURL = async (song, singer) => {
     return;
   }
 
-  // let link = DOWNLOAD_URL + track.id + "/";
-  // link = link + track.duration + "/";
-  // link = link + track.url + "/";
-  // link = link + track.tit_art + ".mp3" + "?extra=";
-  // link = link + track.extra;
   let link = track.url;
   link = encodeURI(link); //to replace unescaped characters from link
 
@@ -108,16 +104,12 @@ const startDownloading = () => {
 console.log("STARTING....");
 let playlist = require("./resso_playlist");
 playlist.getPlaylist().then((res) => {
-  if (res === "Some Error") {
-    //wrong url
-    console.log(
-      "Error: maybe the url you inserted is not of resso music playlist or check your connection!"
-    );
-    return;
-  }
+  console.log("Playlist Name: ", res.playlist);
+  console.log("User Name: ", res.user);
+  console.log("Total songs: ", res.songs.length);
+
   songsList = res.songs;
-  total = res.total;
-  console.log("Total songs:" + total);
+  total = res.songs.length;
 
   //create folder
   let dir = __dirname + "/songs";
