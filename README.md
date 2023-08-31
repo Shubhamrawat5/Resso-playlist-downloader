@@ -1,19 +1,20 @@
 # Resso-playlist-downloader 🎵
 
+[✔️ Working as of 01-09-2023]
+
 1. Open cmd/console
-2. Clone repo by `git clone https://github.com/Shubhamrawat5/Resso-playlist-downloader.git`
-3. Open directory by `cd Resso-playlist-downloader`
-4. Run `npm install` to install all dependencies
-5. Now edit playlist url variable and set your playlist link in file `resso_playlist.js [line 8]`
-6. Run `npm start`
+2. Clone repo - `git clone https://github.com/Shubhamrawat5/Resso-playlist-downloader.git`
+3. Open directory - `cd Resso-playlist-downloader`
+4. Install all dependencies - `npm install`
+5. Run `npm start`
+6. It'll ask for playlist url, paste it and press enter.
 
-- Now a folder named "songs" will be created.
+Dummy Playlist_URL: `https://www.resso.com/playlist/Love-and-Sad-Song-Best-Playlist-6949362741383780354`
 
+- Now a folder "songs" will be created.
 - Playlist info will be extract and all the matching songs will start donwloading!
-
-- If by chance you stop the script in between, then no worries as if song is already downloaded then next time it won't be downloaded again!
-
-- Also there is 5% chance that song's some remix or different same name song will get downloaded...
+- It'll not download same song again if you rerun the code, So if any song is half downloaded then you can delete it from songs folder.
+- Also there is 5% chance that song's some remix or different same name song will get downloaded... I'll be fixing this soon !
 
 ## Screenshots
 

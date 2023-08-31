@@ -1,6 +1,7 @@
 const fs = require("fs");
 const ProgressBar = require("progress");
 const axios = require("axios");
+const prompt = require("prompt");
 
 let { getPlaylist } = require("./resso_playlist");
 
@@ -13,8 +14,7 @@ let notFound = [];
 
 const download = async (song, url) => {
   let numb = index + 1;
-  console.log(`(${numb}/${totalSongs}) Starting download: ${song}`);
-  console.log(url);
+  console.log(`\n(${numb}/${totalSongs}) Starting download: ${song}`);
   const { data, headers } = await axios({
     method: "GET",
     url: url,
@@ -28,7 +28,7 @@ const download = async (song, url) => {
     complete: "=",
     incomplete: " ",
     renderThrottle: 1,
-    totalSongs: parseInt(totalLength),
+    total: parseInt(totalLength),
   });
 
   data.on("data", (chunk) => progressBar.tick(chunk.length));
@@ -105,8 +105,12 @@ const startDownloading = () => {
 };
 
 const start = async () => {
+  prompt.start();
+  const { Playlist_URL } = await prompt.get(["Playlist_URL"]);
+  // "https://www.resso.com/playlist/Love-and-Sad-Song-Best-Playlist-6949362741383780354"
+
   try {
-    const res = await getPlaylist();
+    const res = await getPlaylist(Playlist_URL);
     console.log("Playlist Name: ", res.playlist);
     console.log("User Name: ", res.user);
     console.log("Total songs: ", res.songs.length);
