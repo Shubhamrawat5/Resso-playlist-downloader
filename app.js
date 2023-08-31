@@ -1,17 +1,19 @@
 const fs = require("fs");
-var ProgressBar = require("progress");
+const ProgressBar = require("progress");
 const axios = require("axios");
 
+let { getPlaylist } = require("./resso_playlist");
+
 const INFO_URL = "https://slider.kz/vk_auth.php?q=";
-const DOWNLOAD_URL = "https://slider.kz/download/";
+// const DOWNLOAD_URL = "https://slider.kz/download/";
 let index = -1;
-let songsList = [];
-let total = 0;
+let songList = [];
+let totalSongs = 0;
 let notFound = [];
 
 const download = async (song, url) => {
   let numb = index + 1;
-  console.log(`(${numb}/${total}) Starting download: ${song}`);
+  console.log(`(${numb}/${totalSongs}) Starting download: ${song}`);
   console.log(url);
   const { data, headers } = await axios({
     method: "GET",
@@ -26,7 +28,7 @@ const download = async (song, url) => {
     complete: "=",
     incomplete: " ",
     renderThrottle: 1,
-    total: parseInt(totalLength),
+    totalSongs: parseInt(totalLength),
   });
 
   data.on("data", (chunk) => progressBar.tick(chunk.length));
@@ -36,19 +38,20 @@ const download = async (song, url) => {
   });
 
   //for saving in file...
-  data.pipe(fs.createWriteStream(`${__dirname}/songs/${song}.mp3`));
+  data.pipe(fs.createWriteStream(`./songs/${song}.mp3`));
 };
 
 const getURL = async (song, singer) => {
-  let query = (song + "%20" + singer).replace(/\s/g, "%20");
-  console.log(INFO_URL + query);
+  let query = `${song}%20${singer}`.replace(/\s/g, "%20");
+
+  // console.log(INFO_URL + query);
   const { data } = await axios.get(INFO_URL + query);
 
   // when no result then [{}] is returned so length is always 1, when 1 result then [{id:"",etc:""}]
   if (!data["audios"][""][0].id) {
     //no result
     console.log("==[ SONG NOT FOUND! ]== : " + song);
-    notFound.push(song + " - " + singer);
+    notFound.push(`${song} - ${singer}`);
     startDownloading();
     return;
   }
@@ -66,11 +69,11 @@ const getURL = async (song, singer) => {
     track = data["audios"][""][0];
   }
 
-  if (fs.existsSync(__dirname + "/songs/" + track.tit_art + ".mp3")) {
-    let numb = index + 1;
+  if (fs.existsSync(`./${song}/${track.tit_art}.mp3`)) {
     console.log(
-      "(" + numb + "/" + total + ") - Song already present!!!!! " + song
+      `\n(${index + 1}/${totalSongs}) - Song already present!! ${songName}`
     );
+
     startDownloading(); //next song
     return;
   }
@@ -85,7 +88,7 @@ const getURL = async (song, singer) => {
 
 const startDownloading = () => {
   index += 1;
-  if (index === songsList.length) {
+  if (index === songList.length) {
     console.log("\n#### ALL SONGS ARE DOWNLOADED!! ####\n");
     console.log("Songs that are not found:-");
     let i = 1;
@@ -96,25 +99,31 @@ const startDownloading = () => {
     if (i === 1) console.log("None!");
     return;
   }
-  let song = songsList[index].name;
-  let singer = songsList[index].singer;
+  let song = songList[index].name;
+  let singer = songList[index].singer;
   getURL(song, singer);
 };
 
-console.log("STARTING....");
-let playlist = require("./resso_playlist");
-playlist.getPlaylist().then((res) => {
-  console.log("Playlist Name: ", res.playlist);
-  console.log("User Name: ", res.user);
-  console.log("Total songs: ", res.songs.length);
+const start = async () => {
+  try {
+    const res = await getPlaylist();
+    console.log("Playlist Name: ", res.playlist);
+    console.log("User Name: ", res.user);
+    console.log("Total songs: ", res.songs.length);
 
-  songsList = res.songs;
-  total = res.songs.length;
+    songList = res.songs;
+    totalSongs = res.songs.length;
 
-  //create folder
-  let dir = __dirname + "/songs";
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
+    //create folder
+    let dir = "./songs";
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+
+    startDownloading();
+  } catch (err) {
+    console.log(err);
   }
-  startDownloading();
-});
+};
+
+start();

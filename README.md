@@ -1,11 +1,11 @@
-## Resso-playlist-downloader
+# Resso-playlist-downloader 🎵
 
 1. Open cmd/console
 2. Clone repo by `git clone https://github.com/Shubhamrawat5/Resso-playlist-downloader.git`
 3. Open directory by `cd Resso-playlist-downloader`
 4. Run `npm install` to install all dependencies
 5. Now edit playlist url variable and set your playlist link in file `resso_playlist.js [line 8]`
-6. Run `node app.js`
+6. Run `npm start`
 
 - Now a folder named "songs" will be created.
 
@@ -15,11 +15,11 @@
 
 - Also there is 5% chance that song's some remix or different same name song will get downloaded...
 
-### Screenshots
+## Screenshots
 
 <img src = "https://i.ibb.co/3zF789b/resso.png" width="800"/>
 
-### Contribute & Issues 🚀
+## Contribute & Issues 🚀
 
-- Feel free to help to improve this tool.
-- Inform if you face any problem.
+- Feel free to Contribute to improve this.
+- Raise an Issue if you face any problem.
