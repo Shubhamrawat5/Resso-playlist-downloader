@@ -3,7 +3,7 @@ const ProgressBar = require("progress");
 const axios = require("axios");
 const prompt = require("prompt");
 
-let { getPlaylist } = require("./resso_playlist");
+let { getPlaylist } = require("./src/getPlaylist.js");
 
 const INFO_URL = "https://slider.kz/vk_auth.php?q=";
 // const DOWNLOAD_URL = "https://slider.kz/download/";
